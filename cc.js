@@ -1,23 +1,8 @@
 const { chromium } = require('playwright');
-// const nodemailer = require('nodemailer');
-// const transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     user: 'your gmail',
-//     pass: 'your one time password'
-//   }
-// });
 const axios = require('axios');
+
 const webhookURL = 'INSERT DISCORD WEBHOOK URL';
 const ping = "🟢-----------------------INSERT DISCORD USER PING-----------------------🟢";
-// const locationsNearby = new Set(["Richmond Hill", "Markham Unionville", "North York", "Vaughan", "Newmarket"]);
-// const locationsNearby = {
-//     "Richmond Hill": true,
-//     "Markham Unionville": true,
-//     "North York": true,
-//     "Vaughan": true,
-//     "Newmarket": true
-// }
 const MESSAGE_NO_STOCK = "No more stock!!";
 var lastMessage = MESSAGE_NO_STOCK;
  
