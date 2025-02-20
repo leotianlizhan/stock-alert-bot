@@ -64,7 +64,7 @@ for sku in skus:
             # print(type(statusPickup), type(purchasablePickup), type(statusShipping), type(purchasableShipping))
 
             # Format the message for Discord
-            discord_message = f"Pickup status: {statusPickup} | Purchasable: {purchasablePickup} | Shipping status: {statusShipping} | Purchasable: {purchasableShipping}"
+            discord_message = f"{sku} = Pickup status: {statusPickup} | Purchasable: {purchasablePickup} | Shipping status: {statusShipping} | Purchasable: {purchasableShipping}"
         else:
             shouldPing = True
             discord_message = "The property 'availabilities' was not found in the response."
