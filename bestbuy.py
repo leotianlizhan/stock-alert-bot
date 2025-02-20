@@ -1,7 +1,8 @@
 import requests
 import time
+import threading
 
-webhook_url = 'INSERT DISCORD WEBHOOK URL'  # Replace with your webhook URL
+webhook_url = 'INSERT DISCORD WEBHOOK'  # Replace with your webhook URL
 ping = "INSERT DISCORD USER PING"
 
 # URL for the API endpoint
@@ -11,14 +12,19 @@ skus = [
     "18931347", #5080
     "18931348"  #5090
 ]
-for sku in skus:
+skuIndex = 0
+
+def queryBestbuySku():
+    global skuIndex
+    global skus
+    skuIndex = skuIndex % 2
     # Define the query parameters
     params = {
         'accept': 'application/vnd.bestbuy.standardproduct.v1+json',
         'accept-language': 'en-CA',
         'locations': '985|187|956|178|937|949|200|260|237|179|932|180|943|188|927|196|163|965|195|192|931|233|223|193|617|764|795|916|1016|319|544|910|203|199|194|977|197|198|925|259|954|161|207|160|938|164|926|176|202|959|182|622|613|175|953',
         'postalCode': 'L4E4K2',
-        'skus': sku
+        'skus': skus[skuIndex]
     }
 
     # Define the headers
@@ -27,7 +33,7 @@ for sku in skus:
         'Accept': '*/*',
         'Accept-Language': 'en-US,en;q=0.5',
         'Accept-Encoding': 'gzip, deflate, br, zstd',
-        'Referer': 'https://www.bestbuy.ca/en-ca/reserve-and-pickup/' + sku,
+        'Referer': 'https://www.bestbuy.ca/en-ca/reserve-and-pickup/' + skus[skuIndex],
         'Connection': 'keep-alive',
         'Sec-Fetch-Dest': 'empty',
         'Sec-Fetch-Mode': 'no-cors',
@@ -64,7 +70,7 @@ for sku in skus:
             # print(type(statusPickup), type(purchasablePickup), type(statusShipping), type(purchasableShipping))
 
             # Format the message for Discord
-            discord_message = f"{sku} = Pickup status: {statusPickup} | Purchasable: {purchasablePickup} | Shipping status: {statusShipping} | Purchasable: {purchasableShipping}"
+            discord_message = f"{skus[skuIndex]} = Pickup status: {statusPickup} | Purchasable: {purchasablePickup} | Shipping status: {statusShipping} | Purchasable: {purchasableShipping}"
         else:
             shouldPing = True
             discord_message = "The property 'availabilities' was not found in the response."
@@ -88,3 +94,9 @@ for sku in skus:
         print(discord_message)
     else:
         print("No ping: " + discord_message)
+
+    skuIndex += 1
+    print(time.ctime())
+    threading.Timer(35, queryBestbuySku).start()
+
+queryBestbuySku()
